@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include client_golden_light *.css
+recursive-include client_golden_light *.csv
+recursive-include client_golden_light *.html
+recursive-include client_golden_light *.ico
+recursive-include client_golden_light *.js
+recursive-include client_golden_light *.json
+recursive-include client_golden_light *.md
+recursive-include client_golden_light *.png
+recursive-include client_golden_light *.py
+recursive-include client_golden_light *.svg
+recursive-include client_golden_light *.txt
+recursive-exclude client_golden_light *.pyc
