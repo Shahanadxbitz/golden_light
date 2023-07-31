@@ -8,7 +8,7 @@ frappe.ui.form.on('Payment Entry', {
         })
     },
 
-	paid_to_account_currency(frm) {
+	mode_of_payment(frm) {
 
 		// show currency conversion rate when non-default currency
 		if(frm.doc.paid_to_account_currency != frm.doc.paid_from_account_currency) {
