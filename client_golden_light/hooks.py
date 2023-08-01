@@ -235,3 +235,16 @@ jenv = {
         "get_int:client_golden_light.jinja.methods.get_int",
     ],
 }
+fixtures = [
+
+	{
+		"dt":"Property Setter",
+		"filters": [
+			[
+				"name", "in", [
+					'Sales Invoice-language-default'
+				]
+			]
+		]
+	}
+]

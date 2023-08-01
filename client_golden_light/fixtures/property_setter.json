@@ -1,0 +1,19 @@
+[
+ {
+  "default_value": null,
+  "doc_type": "Sales Invoice",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "language",
+  "modified": "2023-08-01 13:10:38.984479",
+  "name": "Sales Invoice-language-default",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "default",
+  "property_type": "Text",
+  "row_name": null,
+  "value": "ar"
+ }
+]
