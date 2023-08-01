@@ -1,7 +1,6 @@
 frappe.ui.form.on('Payment Entry', {
 
-	onload(frm) {
-
+	party(frm) {
 		// show currency conversion rate when non-default currency
 		if(frm.doc.paid_to_account_currency != frm.doc.paid_from_account_currency) {
 		    frm.set_df_property('paid_amount', 'read_only', 1);
