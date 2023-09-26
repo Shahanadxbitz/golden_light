@@ -1,5 +1,25 @@
 frappe.ui.form.on('Stock Entry', {
-	onload_post_render(frm){
+	async refresh(frm) {
+
+		const divisions = await frappe.db.get_list("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
+
+		if(divisions.length <= 0) return;
+
+		const warehouses = await frappe.db.get_list("Division Permission", {
+		    filters: { parenttype: 'Division', document_type: 'Warehouse', parent: ['in', divisions], applicable_for: ['in', ["", "Stock Entry"]] },
+		    fields: ['document_name'],
+		    pluck: 'document_name',
+		});
+
+		if(warehouses.length <= 0) return;
+
+		const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
+
+		frm.set_query('from_warehouse', { filters });
+		frm.set_query('to_warehouse', { filters });
+
+	},
+    onload_post_render(frm){
         frappe.call({
             method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
             args: {"company":frm.doc.company},
@@ -21,7 +41,6 @@ frappe.ui.form.on('Stock Entry', {
             method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
             args: {"company":frm.doc.company},
             callback: function(r) {
-                print(r.message)
                 frm.fields_dict['items'].grid.get_field('s_warehouse').get_query =
                 function(doc, cdt, cdn) {
                     var child = locals[cdt][cdn];
@@ -37,24 +56,4 @@ frappe.ui.form.on('Stock Entry', {
         });
 
 	},
-	async refresh(frm) {
-
-		const divisions = await frappe.db.get_list("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
-
-		if(divisions.length <= 0) return;
-
-		const warehouses = await frappe.db.get_list("Division Permission", {
-		    filters: { parenttype: 'Division', document_type: 'Warehouse', parent: ['in', divisions], applicable_for: ['in', ["", "Stock Entry"]] },
-		    fields: ['document_name'],
-		    pluck: 'document_name',
-		});
-
-		if(warehouses.length <= 0) return;
-
-		const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
-
-		frm.set_query('from_warehouse', { filters });
-		frm.set_query('to_warehouse', { filters });
-
-	}
 })
