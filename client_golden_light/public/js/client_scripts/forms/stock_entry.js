@@ -1,4 +1,42 @@
 frappe.ui.form.on('Stock Entry', {
+	onload_post_render(frm){
+        frappe.call({
+            method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
+            args: {"company":frm.doc.company},
+            callback: function(r) {
+				console.log(r.message)
+                frm.set_query("from_warehouse", function (frm) {
+                    return {
+                      "filters": {
+                        "name": ["in",r.message],
+                        "is_group":0,
+                        "company": frm.company
+                      }
+                    }
+                  })
+            }
+        });
+
+        frappe.call({
+            method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
+            args: {"company":frm.doc.company},
+            callback: function(r) {
+                print(r.message)
+                frm.fields_dict['items'].grid.get_field('s_warehouse').get_query =
+                function(doc, cdt, cdn) {
+                    var child = locals[cdt][cdn];
+                    return {
+                        filters: {
+                          'name': ['in',r.message],
+                          'is_group': 0,
+                          'company':doc.company
+                    }
+                    }
+                }
+            }
+        });
+
+	},
 	async refresh(frm) {
 
 		const divisions = await frappe.db.get_list("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});

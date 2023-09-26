@@ -248,3 +248,7 @@ fixtures = [
 		]
 	}
 ]
+
+permission_query_conditions = {
+	"Stock Entry": "client_golden_light.warehouse_permissions.se_list_permission"
+}
