@@ -48,3 +48,4 @@ def permitted_warehouse(company=None):
             warehouse.append(w['for_value'])
     return warehouse
     
+
