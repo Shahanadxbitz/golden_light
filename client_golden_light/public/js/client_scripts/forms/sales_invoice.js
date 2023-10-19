@@ -32,15 +32,15 @@ frappe.ui.form.on('Sales Invoice', {
 
 		frm.set_value("previous_outstanding", balance || 0);
     },
-    onload (frm) {
+    // onload (frm) {
 
-        $("[data-fieldname=company_trn]").hide();
+    //     $("[data-fieldname=company_trn]").hide();
 
-        filter_items(frm);
-        setTimeout(() => {
-            $(".form-links").hide();
-        }, 10);
-    },
+    //     filter_items(frm);
+    //     setTimeout(() => {
+    //         $(".form-links").hide();
+    //     }, 10);
+    // },
     validate(frm) {
         validated = true;
         for (const item of frm.doc.items) {

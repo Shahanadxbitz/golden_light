@@ -3,13 +3,13 @@ frappe.ui.form.on('Purchase Order', {
     setup: filter_items,
     supplier: filter_items,
     onload_post_render: filter_items,
-    onload (frm) {
-        filter_items(frm);
-        setTimeout(() => {
+    // onload (frm) {
+    //     filter_items(frm);
+    //     setTimeout(() => {
 
-            $(".form-links").hide();
-        }, 10);
-    },
+    //         $(".form-links").hide();
+    //     }, 10);
+    // },
     validate(frm) {
         validated = true;
         for (const item of frm.doc.items) {

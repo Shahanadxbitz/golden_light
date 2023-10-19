@@ -9,17 +9,17 @@ frappe.ui.form.on('Purchase Invoice', {
             frm.set_df_property("supplier", "read_only", 1);
         }
     },
-    onload (frm) {
+    // onload (frm) {
 
-        $("[data-fieldname=tax_id]").hide();
+    //     $("[data-fieldname=tax_id]").hide();
 
-        filter_items(frm);
-        setTimeout(() => {
+    //     filter_items(frm);
+    //     setTimeout(() => {
 
-            $(".form-links").hide();
-        }, 10);
-		$("[data-fieldname=supplied_items]").parent().closest('.form-section').hide();
-    },
+    //         $(".form-links").hide();
+    //     }, 10);
+	// 	$("[data-fieldname=supplied_items]").parent().closest('.form-section').hide();
+    // },
     validate(frm) {
 		frm.set_value({
             supplier_warehouse: '',

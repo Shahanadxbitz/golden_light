@@ -7,13 +7,13 @@ frappe.ui.form.on('Sales Order', {
             frm.set_df_property("cash_customer_contact_details", "hidden", 0)
         }
     },
-    onload (frm) {
-        filter_items(frm);
-        setTimeout(() => {
+    // onload (frm) {
+    //     filter_items(frm);
+    //     setTimeout(() => {
 
-            $(".form-links").hide();
-        }, 10);
-    },
+    //         $(".form-links").hide();
+    //     }, 10);
+    // },
 
     validate(frm) {
         validated = true;
