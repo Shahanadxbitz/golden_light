@@ -27,6 +27,10 @@ frappe.ui.form.on('Purchase Invoice', {
             set_from_warehouse: '',
         });
 
+        if (frm.doc.update_stock != 1){
+            frappe.throw(__("Kindly check update stock above items table"))
+        }
+
         for(const item of frm.doc.items) {
             item.from_warehouse = "";
             item.rejected_warehouse = "";

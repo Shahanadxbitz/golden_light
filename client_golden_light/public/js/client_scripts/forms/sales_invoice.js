@@ -42,6 +42,10 @@ frappe.ui.form.on('Sales Invoice', {
     //     }, 10);
     // },
     validate(frm) {
+        if (frm.doc.update_stock != 1){
+            console.log("yes")
+            frappe.throw(__("Kindly check update stock above items table"))
+        }
         validated = true;
         for (const item of frm.doc.items) {
             if(item.rate == 0) {
