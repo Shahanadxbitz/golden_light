@@ -1,7 +1,7 @@
 from frappe import _
 
 def get_data():
-	return [
+	return [ 
 		{
 			"module_name": "Customizations for Golden Light",
 			"color": "grey",
