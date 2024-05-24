@@ -228,13 +228,14 @@ fixtures = [
 
 # Jinja Methods
 # ---------------
-jenv = {
+jinja = {
     "methods": [
         "get_items:client_golden_light.jinja.methods.get_items",
         "get_party_details:erpnext.accounts.doctype.payment_entry.payment_entry.get_party_details",
         "get_int:client_golden_light.jinja.methods.get_int",
     ],
 }
+
 fixtures = [
 
 	{
