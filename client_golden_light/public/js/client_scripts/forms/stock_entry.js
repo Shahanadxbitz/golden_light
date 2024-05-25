@@ -1,24 +1,24 @@
 frappe.ui.form.on('Stock Entry', {
-	async refresh(frm) {
+	// async refresh(frm) {
 
-		const divisions = await frappe.db.get_all("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
+	// 	const divisions = await frappe.db.get_all("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
 
-		if(divisions.length <= 0) return;
+	// 	if(divisions.length <= 0) return;
 
-		const warehouses = await frappe.db.get_list("Division Permission", {
-		    filters: { parenttype: 'Division', document_type: 'Warehouse', parent: ['in', divisions], applicable_for: ['in', ["", "Stock Entry"]] },
-		    fields: ['document_name'],
-		    pluck: 'document_name',
-		});
+	// 	const warehouses = await frappe.db.get_list("Division Permission", {
+	// 	    filters: { parenttype: 'Division', document_type: 'Warehouse', parent: ['in', divisions], applicable_for: ['in', ["", "Stock Entry"]] },
+	// 	    fields: ['document_name'],
+	// 	    pluck: 'document_name',
+	// 	});
 
-		if(warehouses.length <= 0) return;
+	// 	if(warehouses.length <= 0) return;
 
-		const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
+	// 	const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
 
-		frm.set_query('from_warehouse', { filters });
-		frm.set_query('to_warehouse', { filters });
+	// 	frm.set_query('from_warehouse', { filters });
+	// 	frm.set_query('to_warehouse', { filters });
 
-	},
+	// },
     onload_post_render(frm){
         frappe.call({
             method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
