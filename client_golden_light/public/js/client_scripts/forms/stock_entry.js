@@ -19,29 +19,29 @@ frappe.ui.form.on('Stock Entry', {
 	// 	frm.set_query('to_warehouse', { filters });
 
 	// },
-    async refresh(frm) {
-        frappe.call({
-            method: 'client_golden_light.api.get_permitted_divisions',
-            args: {
-                user: frappe.session.user,
-            },
-            callback: function(response) {
-                if(response.message.length <= 0) return;
+    // async refresh(frm) {
+    //     frappe.call({
+    //         method: 'client_golden_light.api.get_permitted_divisions',
+    //         args: {
+    //             user: frappe.session.user,
+    //         },
+    //         callback: function(response) {
+    //             if(response.message.length <= 0) return;
 
-                frappe.call({
-                    method: 'client_golden_light.api.ge_permitted_warehouses',
-                    args: {
-                        divisions: response.message,
-                    },
-                    callback: function(response) {
-                        const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
-		                frm.set_query('from_warehouse', { filters });
-	                	frm.set_query('to_warehouse', { filters });
-                    }
-                });
-            }
-        });
-    },
+    //             frappe.call({
+    //                 method: 'client_golden_light.api.ge_permitted_warehouses',
+    //                 args: {
+    //                     divisions: response.message,
+    //                 },
+    //                 callback: function(response) {
+    //                     const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
+	// 	                frm.set_query('from_warehouse', { filters });
+	//                 	frm.set_query('to_warehouse', { filters });
+    //                 }
+    //             });
+    //         }
+    //     });
+    // },
     onload_post_render(frm){
         frappe.call({
             method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
