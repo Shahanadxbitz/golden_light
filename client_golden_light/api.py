@@ -5,7 +5,7 @@ def get_permitted_divisions(user):
     return divisions
 
 def get_permitted_warehouses(divisions):
-    warehouses =  frappe.db.get_list("Division Permission", {
+    warehouses =  frappe.db.get_all("Division Permission", {
         "filters": { "parenttype": 'Division', "document_type": 'Warehouse', "parent": ['in', divisions], "applicable_for": ['in', ["", "Stock Entry"]] },
 	    "fields": ['document_name'],
 	    "pluck": 'document_name',
