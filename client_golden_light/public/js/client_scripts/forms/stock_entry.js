@@ -1,7 +1,7 @@
 frappe.ui.form.on('Stock Entry', {
 	async refresh(frm) {
 
-		const divisions = await frappe.db.get_list("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
+		const divisions = await frappe.db.get_all("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
 
 		if(divisions.length <= 0) return;
 
