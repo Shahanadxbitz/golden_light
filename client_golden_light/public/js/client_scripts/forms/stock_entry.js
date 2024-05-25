@@ -1,7 +1,7 @@
 frappe.ui.form.on('Stock Entry', {
 	// async refresh(frm) {
 
-	// 	const divisions = await frappe.db.get_all("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
+	// 	const divisions = await frappe.db.get_list("Division User", { filters: { parenttype: 'Division', user: frappe.session.user }, fields: ['parent'], pluck: 'parent'});
 
 	// 	if(divisions.length <= 0) return;
 
@@ -19,6 +19,29 @@ frappe.ui.form.on('Stock Entry', {
 	// 	frm.set_query('to_warehouse', { filters });
 
 	// },
+    async refresh(frm) {
+        frappe.call({
+            method: 'client_golden_light.api.get_permitted_divisions',
+            args: {
+                user: frappe.session.user,
+            },
+            callback: function(response) {
+                if(response.message.length <= 0) return;
+
+                frappe.call({
+                    method: 'client_golden_light.api.ge_permitted_warehouses',
+                    args: {
+                        divisions: response.message,
+                    },
+                    callback: function(response) {
+                        const filters = [['name', 'in', warehouses], ['is_group', '=', 0]];
+		                frm.set_query('from_warehouse', { filters });
+	                	frm.set_query('to_warehouse', { filters });
+                    }
+                });
+            }
+        });
+    },
     onload_post_render(frm){
         frappe.call({
             method: 'client_golden_light.warehouse_permissions.permitted_warehouse',
