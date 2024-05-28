@@ -1,10 +1,14 @@
 import frappe
-from erpnext.stock.report.stock_balance.stock_balance import (
+# from erpnext.stock.report.stock_balance.stock_balance import (
+#     StockBalanceReport,
+# )
+
+from client_golden_light.customizations_for_golden_light.report.stock_balance_gl.stock_balance_gl import (
+    get_items,
     get_item_details,
     get_item_warehouse_map,
-    get_items,
-    get_stock_ledger_entries,
-)
+    get_stock_ledger_entries
+) 
 from erpnext.stock.utils import is_reposting_item_valuation_in_progress
 from frappe import _
 from frappe.utils import flt
