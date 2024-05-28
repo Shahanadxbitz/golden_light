@@ -90,7 +90,7 @@ def validate_filters(filters):
 def get_warehouse_list(filters):
 
     condition = ""
-    user_permitted_warehouse = frappe.get_list("Warehouse",filters={"company":filters['company']}, as_list=True, ignore_permissions=True)
+    user_permitted_warehouse = frappe.get_list("Warehouse",filters={"company":frappe.defaults.get_user_default("Company")}, as_list=True, ignore_permissions=True)
     value = ()
     if user_permitted_warehouse:
         condition = "and name in %s"
