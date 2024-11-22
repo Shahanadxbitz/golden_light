@@ -22,7 +22,7 @@ def execute(filters=None):
 
     filters["from_date"] = filters["to_date"] = frappe.utils.nowdate()
 
-    validate_filters(filters)
+    # validate_filters(filters)
 
     columns = get_columns(filters)
 
