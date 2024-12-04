@@ -39,13 +39,14 @@ frappe.query_reports["Cash Accounts Balance"] = {
 			fieldname: "include_suppliers",
 			label: __("Include Suppliers"),
 			fieldtype: "MultiSelectList",
+			// default:null,
 			get_data(data) {
 				return frappe.db.get_link_options("Supplier", data);
 			},
 		}
 	],
 	onload(report) {
-		report.set_filter_value("include_suppliers", ["مكتب رمضاني للصرافة", "شركة الصراف للصرافة"]);
+		report.set_filter_value("include_suppliers", []);
 	},
 	formatter: function(value, row, column, data, default_formatter) {
 		if (data && column.fieldname=="account") {
@@ -77,3 +78,6 @@ function open_general_ledger(data) {
 	}
 	frappe.set_route("query-report", "General Ledger");
 }
+
+
+

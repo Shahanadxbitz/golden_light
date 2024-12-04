@@ -60,7 +60,10 @@ def execute(filters=None):
         elif not filters.get("filter_total_zero_qty"):
             data.append(row)
 
-    add_warehouse_column(columns, warehouse_list)
+    val=add_warehouse_column(columns, warehouse_list)
+    print("val",val)
+
+    
     return columns, data
 
 
@@ -88,35 +91,42 @@ def validate_filters(filters):
 
 
 def get_warehouse_list(filters):
-
-    condition = ""
-    user_permitted_warehouse = frappe.get_list("Warehouse",filters={"company":frappe.defaults.get_user_default("Company")}, as_list=True, ignore_permissions=True)
-    value = ()
-    if user_permitted_warehouse:
-        condition = "and name in %s"
-        value = set(user_permitted_warehouse)
-    elif not user_permitted_warehouse and filters.get("warehouse"):
-        condition = "and name = %s"
-        value = filters.get("warehouse")
-
-    return frappe.db.sql(
-        """
-		select name
-		from `tabWarehouse`
-		where
-			is_group = 0
-			{condition}
-		order by report_order
-		""".format(
-            condition=condition
-        ),
-        value,
-        as_dict=1,
+    """
+    Fetch and sort the warehouse list based on `report_order`.
+    Warehouses with `report_order` = 0 will appear last.
+    """
+    warehouses = frappe.get_all(
+        "Warehouse",
+        fields=["name", "report_order"],
+        filters={"company": frappe.defaults.get_user_default("Company")},
+        order_by="report_order, name"
     )
+
+    # Sort warehouses with 0 `report_order` last
+    sorted_warehouses = sorted(
+        warehouses,
+        key=lambda x: (x["report_order"] == 0, x["report_order"], x["name"]),
+    )
+
+    return [wh["name"] for wh in sorted_warehouses]
+
 
 
 def add_warehouse_column(columns, warehouse_list):
+    """
+    Add columns for warehouses based on the sorted warehouse list.
+    """
+    for warehouse in warehouse_list:
+        columns.append(
+            {
+                "label": _(warehouse),
+                "fieldname": warehouse,
+                "fieldtype": "Float",
+                "width": 100,
+            }
+        )
 
+    # Add a Total Qty column if there are multiple warehouses
     if len(warehouse_list) > 1:
         columns.append(
             {
@@ -127,12 +137,4 @@ def add_warehouse_column(columns, warehouse_list):
             }
         )
 
-    for wh in warehouse_list:
-        columns.append(
-            {
-                "label": _(wh.name),
-                "fieldname": wh.name,
-                "fieldtype": "Float",
-                "width": 100,
-            }
-        )
+

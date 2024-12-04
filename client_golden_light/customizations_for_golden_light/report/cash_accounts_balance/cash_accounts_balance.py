@@ -16,10 +16,12 @@ def execute(filters=None):
 
     for account in cash_accounts:
         balance = get_balance_on(account, filters.get("to_date"), in_account_currency=False)
+        account_type = frappe.db.get_value("Account", account, "account_type")
         data.append(
             {
                 "account": account,
                 "balance_amount": balance,
+                "account_type":account_type
             }
         )
 
@@ -60,6 +62,12 @@ def get_columns():
             "fieldtype": "Currency",
             "width": 150,
         },
+        {
+            "fieldname": "account_type",
+            "label": _("Account Type"),
+            "fieldtype": "Data",
+            "width": 150,
+        },
     ]
 
 
@@ -68,13 +76,28 @@ def get_suppliers(data, filters=None):
         return
 
     suppliers = filters.get("include_suppliers")
+    account = filters.get("account")
+
+    # if not account:
+    #     frappe.throw(_("Account is missing in filters."))
+
     for supplier in suppliers:
-        data.append(
-            {
-                "account": supplier,
-                "balance_amount": get_balance_on(
-                    party_type="Supplier", party=supplier, date=filters.get("to_date")
-                ),
-                "party_type": "Supplier",
-            }
+        # Fetch balance amount
+        balance_amount = get_balance_on(
+            party_type="Supplier", party=supplier, date=filters.get("to_date")
         )
+        
+        # Fetch account type
+        # print(account)
+        account_type = frappe.db.get_value("Account", account, "account_type")
+
+        # Debugging logs
+        # frappe.log_error(f"Account: {account}, Account Type: {account_type}, Supplier: {supplier}", "Debug Info")
+
+        # Append supplier data to the list
+        data.append({
+            "account": account,
+            "balance_amount": balance_amount,
+            "party_type": "Supplier",
+            "account_type": account_type,
+        })

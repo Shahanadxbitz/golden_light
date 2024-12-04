@@ -1,7 +1,7 @@
 frappe.ui.form.on('Purchase Order', {
     refresh: filter_items,
     setup: filter_items,
-    supplier: filter_items,
+    // supplier: filter_items,
     onload_post_render: filter_items,
     // onload (frm) {
     //     filter_items(frm);
@@ -10,17 +10,17 @@ frappe.ui.form.on('Purchase Order', {
     //         $(".form-links").hide();
     //     }, 10);
     // },
-    validate(frm) {
-        validated = true;
-        for (const item of frm.doc.items) {
-            if(item.rate == 0) {
-                validated = false;
-                frappe.msgprint("Rate cannot be zero.");
-            }
-        }
+    // validate(frm) {
+    //     validated = true;
+    //     for (const item of frm.doc.items) {
+    //         if(item.rate == 0) {
+    //             validated = false;
+    //             frappe.msgprint("Rate cannot be zero.");
+    //         }
+    //     }
 
-        frappe.validated = validated;
-    },
+    //     frappe.validated = validated;
+    // },
 
 });
 
