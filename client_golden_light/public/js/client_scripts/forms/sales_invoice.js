@@ -14,6 +14,9 @@ frappe.ui.form.on('Sales Invoice', {
     setup(frm) {
         filter_items(frm);
     },
+    async before_save(frm) {
+        await update_customer_balance(frm);
+    },
     onload_post_render: filter_items,
     async customer(frm) {
         filter_items(frm);
@@ -24,13 +27,13 @@ frappe.ui.form.on('Sales Invoice', {
 		}
 
 		// get customer balance
-		const { message: balance } = await frappe.call("erpnext.accounts.utils.get_balance_on", {
-			date: frm.doc.posting_date,
-			party_type: "Customer",
-			party: frm.doc.customer,
-		});
+		// const { message: balance } = await frappe.call("erpnext.accounts.utils.get_balance_on", {
+		// 	date: frm.doc.posting_date,
+		// 	party_type: "Customer",
+		// 	party: frm.doc.customer,
+		// });
 
-		frm.set_value("previous_outstanding", balance || 0);
+		// frm.set_value("previous_outstanding", balance || 0);
     },
     // onload (frm) {
 
@@ -46,6 +49,7 @@ frappe.ui.form.on('Sales Invoice', {
         //     console.log("yes")
         //     frappe.throw(__("Kindly check update stock above items table"))
         // }
+
         validated = true;
         for (const item of frm.doc.items) {
             if(item.rate == 0) {
@@ -53,14 +57,28 @@ frappe.ui.form.on('Sales Invoice', {
                 frappe.msgprint("Rate cannot be zero.");
             }
         }
-
-		frm.set_value('current_outstanding', frm.doc.outstanding_amount + frm.doc.previous_outstanding);
+		// frm.set_value('current_outstanding', frm.doc.outstanding_amount + frm.doc.previous_outstanding);
 
 
         frappe.validated = validated;
     },
 });
+async function update_customer_balance(frm) {
+    if (!frm.doc.customer) return;
 
+    const { message: balance } = await frappe.call({
+        method: "erpnext.accounts.utils.get_balance_on",
+        args: {
+            date: frm.doc.posting_date,
+            party_type: "Customer",
+            party: frm.doc.customer
+        }
+    });
+
+    const prev = balance || 0;
+    frm.set_value("previous_outstanding", prev);
+    frm.set_value("current_outstanding", (frm.doc.outstanding_amount || 0) + prev);
+}
 function filter_items(frm) {
     frm.fields_dict.items.grid.get_field('item_code').get_query = function(doc, cdt, cdn) {
 
